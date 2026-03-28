@@ -32,7 +32,7 @@ This will use the next hour from when it was called. For example, if it was call
 
 6. Bonus: Convert your API into a Docker service and deploy it.
 
-## Submission Summary (Assisted by Github Copilot)
+## Submission Summary (Cowork with Github Copilot)
 
 ### What I built
 
@@ -86,6 +86,8 @@ python starter.py --check-key
 docker build -t city-weather-api .
 docker run --rm -p 8000:8000 -e OPENWEATHER_API_KEY="your_api_key_here" city-weather-api
 ```
+
+The Docker workflow is: Docker Compose reads `docker-compose.yml`, sees that the service should be built from the current directory, and then uses `Dockerfile` to build the image. During that build, Docker starts from a Python base image, installs the dependencies, copies the project files, and sets `uvicorn` as the default startup command. After the image is built, Compose runs the container with the configured port mapping and passes `OPENWEATHER_API_KEY` into the service.
 
 ### Known limitations
 

@@ -1,4 +1,4 @@
-# City Weather Comparison API
+# City Weather Comparison API (Co-work with Github Copilot)
 
 Version: 1.0.0
 Base URL: `http://localhost:8000`

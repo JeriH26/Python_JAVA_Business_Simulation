@@ -93,6 +93,7 @@ SELECT
     date_manufactured::DATE              AS date_manufactured
 FROM raw_products;
 
+SELECT * FROM transformed_products;
 
 -- ---------------------------------------------------------------
 -- 5. Task 3 — Reconstruct the warehouse column

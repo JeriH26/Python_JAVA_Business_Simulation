@@ -41,7 +41,7 @@ The `userData.json` file contains a list of user objects with the following sche
 
 ---
 
-## Solution 1: Adding a New User
+## Solution 1: Adding a New User (Cowork with Github Copilot and Codex)
 
 ### Approach
 
@@ -93,10 +93,10 @@ python solution2_last_accessed.py
 ### Approach
 
 To handle data quality issues, we implement:
-- **Validate first**: Check every record and report whether data is clean.
-- **No-op when clean**: If no errors and no cleanup candidates are found, do not modify or save anything.
-- **Fix only when needed**: If cleanup issues are found (unexpected fields, missing optional values, structure normalization), offer auto-fix and then save.
-- **Manual-fix path for invalid data**: If hard validation errors exist (missing required fields, invalid types/formats), report them for manual correction before saving.
+- **Validate first**: Check every record and classify issues instead of treating all problems the same way.
+- **Clean data path**: If a record is already valid and no cleanup is needed, no processing or saving is required.
+- **Fixable data path**: If only cleanup issues are found (unexpected fields, missing optional values, structure normalization), auto-fix and save safely.
+- **Invalid data path**: If hard validation errors exist (missing required fields, invalid types/formats), report them for manual correction instead of guessing a fix.
 
 **Implementation:** see `solution3_validation.py`
 
@@ -112,7 +112,7 @@ python solution3_validation.py
 |---|---|
 | **Add new user** | Load JSON → Find max ID → Append new user → Save |
 | **Last accessed user** | Parse all timestamps → Find max → Return user |
-| **Handle bad data** | Validate schema → Sanitize fields → Apply defaults → Log errors |
+| **Handle bad data** | Validate each record → if clean, do nothing → if fixable, auto-fix safely → if invalid, report hard errors |
 
 ## Best Practices
 

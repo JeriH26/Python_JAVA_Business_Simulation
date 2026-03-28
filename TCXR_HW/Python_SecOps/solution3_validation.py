@@ -141,11 +141,29 @@ class UserValidator:
             sanitized['last_login'] = datetime.now(timezone.utc).isoformat(timespec='seconds').replace('+00:00', 'Z')
         
         return sanitized
+
+    @staticmethod
+    def find_missing_user_ids(users: List[Dict[str, Any]]) -> List[int]:
+        """Find gaps in the integer user_id sequence."""
+        ids = [
+            user.get('user_id')
+            for user in users
+            if isinstance(user.get('user_id'), int)
+        ]
+
+        if not ids:
+            return []
+
+        min_id = min(ids)
+        max_id = max(ids)
+        existing_ids = set(ids)
+
+        return [user_id for user_id in range(min_id, max_id + 1) if user_id not in existing_ids]
     
     @staticmethod
     def validate_and_load_json(
         json_file: str,
-    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]:
+    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]], List[int]]:
         """
         Load JSON file and validate/sanitize all user records.
         
@@ -153,10 +171,10 @@ class UserValidator:
             json_file: Path to userData.json file
             
         Returns:
-            Tuple of (valid_users_sanitized, invalid_users_with_details, cleanup_candidates)
+            Tuple of (valid_users_sanitized, invalid_users_with_details, cleanup_candidates, missing_user_ids)
         
         Example:
-            >>> valid, invalid = UserValidator.validate_and_load_json('userData.json')
+            >>> valid, invalid, cleanup, missing_ids = UserValidator.validate_and_load_json('userData.json')
             >>> print(f"Valid: {len(valid)}, Invalid: {len(invalid)}")
             Valid: 3, Invalid: 0
         """
@@ -190,18 +208,20 @@ class UserValidator:
                         'user': user,
                         'errors': errors
                     })
-            
-            return valid_users, invalid_users, cleanup_candidates
+
+            missing_user_ids = UserValidator.find_missing_user_ids(users)
+
+            return valid_users, invalid_users, cleanup_candidates, missing_user_ids
             
         except FileNotFoundError:
             print(f"✗ Error: File '{json_file}' not found.")
-            return [], [], []
+            return [], [], [], []
         except json.JSONDecodeError as e:
             print(f"✗ JSON parsing error: {e}")
-            return [], [], []
+            return [], [], [], []
         except Exception as e:
             print(f"✗ Error loading file: {e}")
-            return [], [], []
+            return [], [], [], []
 
 
 def save_cleaned_users(json_file: str, valid_users: List[Dict[str, Any]]) -> bool:
@@ -229,6 +249,7 @@ def print_validation_report(
     valid_users: List[Dict[str, Any]],
     invalid_users: List[Dict[str, Any]],
     cleanup_candidates: List[Dict[str, Any]],
+    missing_user_ids: List[int],
 ) -> None:
     """Print a detailed validation report."""
     
@@ -241,6 +262,7 @@ def print_validation_report(
     print(f"✓ Valid records: {len(valid_users)}")
     print(f"✗ Invalid records: {len(invalid_users)}")
     print(f"⚠ Records needing cleanup: {len(cleanup_candidates)}")
+    print(f"⚠ Missing user_id values: {missing_user_ids if missing_user_ids else 'None'}")
     print()
     
     # Details of invalid records
@@ -287,18 +309,21 @@ def main():
     print("Loading and validating user records...")
     print()
     
-    valid_users, invalid_users, cleanup_candidates = UserValidator.validate_and_load_json(json_file)
+    valid_users, invalid_users, cleanup_candidates, missing_user_ids = UserValidator.validate_and_load_json(json_file)
     
     # Print validation report
-    print_validation_report(valid_users, invalid_users, cleanup_candidates)
+    print_validation_report(valid_users, invalid_users, cleanup_candidates, missing_user_ids)
 
-    if not invalid_users and not cleanup_candidates:
+    if not invalid_users and not cleanup_candidates and not missing_user_ids:
         print("No problems found. Data is already clean, so no changes were made.")
         print("\n" + "=" * 60)
         return
 
     if invalid_users:
         print("Invalid records need manual fixes before saving cleaned data.")
+
+    if missing_user_ids:
+        print(f"Missing user_id values detected: {missing_user_ids}")
 
     if cleanup_candidates and not invalid_users:
         response = input("\nAuto-fix cleanable records and save changes? (yes/no): ").strip().lower()

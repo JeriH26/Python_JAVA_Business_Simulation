@@ -45,7 +45,7 @@ If you cannot answer a question, simply state that and move on to the next one.
 3. We need the warehouse columns to be appended back together. Create an SQL query that combines the two columns to the previous output.
 4. How would you better track the lineage of this data and ensure the analyst's assumptions and expectations align with the stakeholder's requirements?
 
-## Answer (assisted by Github Copilot)
+## Answer (Cowork with Github Copilot)
 
 ### 1. Potential issues with the analyst's changes
 

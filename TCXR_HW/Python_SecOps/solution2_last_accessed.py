@@ -84,15 +84,7 @@ def print_user_info(user: Dict[str, Any]) -> None:
 
 
 def get_all_users_sorted_by_access(json_file: str) -> list:
-    """
-    Get all users sorted by last access time (most recent first).
-    
-    Args:
-        json_file: Path to the userData.json file
-        
-    Returns:
-        List of users sorted by last login (descending)
-    """
+    """Backup helper to return all users sorted by last access time."""
     try:
         with open(json_file, 'r') as f:
             data = json.load(f)

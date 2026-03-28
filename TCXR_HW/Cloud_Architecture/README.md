@@ -56,25 +56,9 @@ The company is now migrating to the cloud and is choosing between AWS, Azure, an
 
 ---
 
-## Answer (Assisted by Codex)
+## Answer (Cowork with Codex)
 
 **Provider Chosen:** GCP
-
-## Solution Overview
-
-I recommend a **GCP-native micro-batch architecture**:
-
-`Warehouses upload CSV files -> Cloud Storage -> Cloud Run -> BigQuery -> Looker Studio`
-
-This design is the best fit because:
-
-- it matches the company's GCP preference
-- 15-minute latency does not require full streaming
-- the team is stronger in SQL than Python
-- the solution stays cost-aware and easy to operate
-- dashboards can replace manual Excel reporting
-
----
 
 ## A. Proposed Cloud-Based Architecture
 
@@ -143,27 +127,9 @@ I did **not** choose Pub/Sub + Dataflow streaming because the assignment does no
 
 ![Data Flow Architecture Diagram](./Cloud_Data_flow.png)
 
-### Data Flow Explanation
+The diagram shows a simple micro-batch pipeline: warehouse and third-party CSV files land in **Cloud Storage**, **Cloud Scheduler** triggers processing every 15 minutes, **Cloud Run** validates and ingests the files, invalid files move to **quarantine**, valid records load into **BigQuery raw tables**, **BigQuery scheduled queries** create curated reporting tables, and **Looker Studio** reads those curated tables for mobile dashboards. Historical files are kept in archive storage, while **Cloud Logging / Monitoring** tracks failures and pipeline health.
 
-The diagram shows one simple path:
-
-1. Files first land in **Cloud Storage**.
-2. A timed process checks for new files every 15 minutes.
-3. **Cloud Run** validates the files.
-4. Good files go into **BigQuery raw tables**.
-5. Bad files go to **quarantine** for review.
-6. **BigQuery** transforms raw data into clean tables for reporting.
-7. **Looker Studio** reads those reporting tables and shows dashboards to executives.
-
-### Suggested Data Layers
-
-| Layer | Example | Purpose |
-| --- | --- | --- |
-| Landing | `gs://xyz-inventory-landing/raw/` | Original uploaded CSV files |
-| Quarantine | `gs://xyz-inventory-landing/quarantine/` | Invalid files |
-| Archive | `gs://xyz-inventory-archive/processed/` | Retained processed files |
-| Raw | `raw_inventory_uploads` | Direct loaded data from CSV |
-| Curated | `cur_inventory_snapshot` | Clean table for reporting |
+In practice, the main data layers are: landing files in Cloud Storage, quarantine/archive paths in Cloud Storage, raw tables in BigQuery, and curated reporting tables in BigQuery.
 
 ---
 
@@ -173,26 +139,9 @@ The script is now stored separately here:
 
 - [request_orders.sh](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/TCXR_HW/Cloud_Architecture/scripts/request_orders.sh)
 
-### What This Script Does
+This script automates order retrieval from a partner API. It calls the API, downloads the CSV file, verifies that the file is not empty, and uploads it to Cloud Storage. This replaces a manual process where someone downloads a file from a partner system and uploads it by hand.
 
-This script automates order retrieval from a partner API:
-
-1. call the partner API
-2. download the CSV file
-3. check that the file is not empty
-4. upload the file to Cloud Storage
-
-### Why This Helps
-
-This replaces a manual process such as:
-
-- someone logging into a partner portal
-- downloading a CSV by hand
-- uploading it manually into the company system
-
-That manual process does not scale well and creates delays and mistakes.
-
-### Example Use
+### Example
 
 ```bash
 chmod +x TCXR_HW/Cloud_Architecture/scripts/request_orders.sh
@@ -207,19 +156,7 @@ The bonus script is stored separately here:
 
 - [check_and_transfer_partner_file.sh](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/TCXR_HW/Cloud_Architecture/scripts/check_and_transfer_partner_file.sh)
 
-### What This Script Does
-
-This script automates file pickup from a third-party SFTP location:
-
-1. connect to the partner SFTP server
-2. look for the expected daily file
-3. download it
-4. verify that the file exists and is not empty
-5. move it into Cloud Storage
-
-### Why This Is Useful
-
-This helps when the partner does not expose an API and only delivers flat files. It also reduces operational risk because the script can fail fast when a file is missing.
+This script automates file pickup from a third-party SFTP location. It checks for the expected file, downloads it, verifies that it exists and is not empty, and then moves it into Cloud Storage. This is useful when a partner delivers files over SFTP instead of exposing an API.
 
 ### Recommended Production Improvements
 
@@ -231,25 +168,9 @@ For production, I would add:
 - alerting if a file is late or missing
 - secrets management instead of hardcoded credentials
 
-### Example Use
+### Example
 
 ```bash
 chmod +x TCXR_HW/Cloud_Architecture/scripts/check_and_transfer_partner_file.sh
 TCXR_HW/Cloud_Architecture/scripts/check_and_transfer_partner_file.sh
 ```
-
----
-
-## Final Recommendation
-
-If XYZ Inc. wants a solution that is simple, affordable, and realistic for a SQL-heavy team, the strongest choice is:
-
-- **Cloud Storage** for file landing
-- **Cloud Scheduler** for 15-minute automation
-- **Cloud Run** for validation and orchestration
-- **BigQuery** for raw and curated reporting tables
-- **Looker Studio** for mobile dashboards
-
-This design is structured, cloud-native, and easy to explain:
-
-`upload -> validate -> store -> transform -> visualize`

@@ -1,56 +1,11 @@
 # Python_JAVA_Business_Simulation
 
-**Python_JAVA_Business_Simulation** is a collection of small Java programs and utilities organized into a multi-module workspace. The repository contains examples of object-oriented design, simple command-line applications, and academic/learning projects.
+This repository is organized into three main modules:
 
----
+1. **Java business case simulations**: small Java projects that model practical business scenarios such as rewards systems, claims tracking, sales reporting, and order workflows. Main code lives in [src/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/src), [ordersystem/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/ordersystem), and [creditcardpro/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/creditcardpro).
 
-## 📁 Repository Structure
+2. **TCXR interview business cases**: take-home style exercises covering SQL/data lineage, Python record handling, API design, Docker deployment, and cloud architecture. These materials are grouped under [TCXR_HW/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/TCXR_HW), including [SQL_Data_lineage/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/TCXR_HW/SQL_Data_lineage), [Python_SecOps/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/TCXR_HW/Python_SecOps), [API_Python/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/TCXR_HW/API_Python), and [Cloud_Architecture/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/TCXR_HW/Cloud_Architecture).
 
-- **bin/** – Compiled classes and runnable JARs for some projects.
-- **creditcardpro/** – A standalone credit card processing application.
-- **ordersystem/** – Contains `CoffeeShopOrder.java`, a sample order‑management class.
-- **src/** – Main source tree for Java modules and programs.
-  - **main/java/module-info.java** – Module configuration for the Java modules.
-  - **DeveloperProfile/** – `DeveloperProfile.java` demonstrating a simple data model.
-  - **globalpay/converter/** – `CurrencyConverter.java` for performing currency conversions.
-  - **securesureclaimtracker/** – `SecureSureClaimTracker.java` for insurance claim tracking logic.
-  - **ShopSmartRewardSys/** – `ShopSmartRewardSys.java` showcasing a rewards system.
-  - **Program2_WeeklySalesReporter/** – `Program2_WeeklySalesReporter.java` for weekly sales reporting.
-  - **resources/** – Contains property files such as `Messages_en_US.properties` for localization.
+3. **Ongoing Python/Java fundamentals training**: continuous coding practice for core algorithms, syntax, and problem-solving in both languages. Training materials are in [training/](/Users/huangjunyi/Documents/Github/Python_JAVA_Business_Simulation/training).
 
-> ⚠️ The workspace may contain additional packages or projects; this high‑level list captures the main components.
-
-## 🚀 Getting Started
-
-1. **Prerequisites**
-   - Java Development Kit (JDK) 11 or higher installed and `java`/`javac` on your PATH.
-   - An IDE such as IntelliJ IDEA, Eclipse, or VS Code with Java support.
-
-2. **Building the Code**
-   - If using a build tool (e.g. Maven/Gradle), configure accordingly. Currently, the repo is simple and can be compiled directly:
-     ```sh
-     javac -d bin src/main/java/**/*.java
-     ```
-
-3. **Running a Program**
-   - After compilation, run a class using:
-     ```sh
-     java -cp bin globalpay.converter.CurrencyConverter
-     ```
-   - Replace the fully qualified class name with whichever entry point you wish to execute.
-
-4. **Testing / Examples**
-   - There are no automated tests included by default. You can run `main` methods in the various classes to observe behavior.
-
-## 🧩 How to Contribute
-
-- Feel free to add new modules, improve existing programs, or include tests.
-- Fork the repository, make your changes, and open a pull request explaining the improvements.
-
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-*Maintained by the Python_JAVA_Business_Simulation community.*
+This repo is intended as a mixed portfolio of business-oriented case work and steady language fundamentals practice.

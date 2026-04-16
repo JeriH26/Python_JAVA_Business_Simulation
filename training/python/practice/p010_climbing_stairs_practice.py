@@ -1,4 +1,5 @@
 """P010 Climbing Stairs Practice
+Algorithm: Dynamic programming (rolling states)
 TODO: implement solve(n)
 """
 

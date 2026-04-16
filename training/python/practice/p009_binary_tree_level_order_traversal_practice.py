@@ -1,4 +1,5 @@
 """P009 Binary Tree Level Order Traversal Practice
+Algorithm: BFS using queue
 TODO: implement solve(root)
 """
 
@@ -11,7 +12,19 @@ class TreeNode:
 
 
 def solve(root):
-    raise NotImplementedError("TODO: implement p009 level order traversal")
+    result = []
+
+    def dfs(node, level):
+        if not node:
+            return
+        if level == len(result):
+            result.append([])
+        result[level].append(node.val)
+        dfs(node.left, level + 1)
+        dfs(node.right, level + 1)
+
+    dfs(root, 0)
+    return result
 
 
 if __name__ == '__main__':

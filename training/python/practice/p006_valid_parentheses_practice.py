@@ -1,4 +1,5 @@
 """P006 Valid Parentheses Practice
+Algorithm: Stack matching
 TODO: implement solve(s)
 """
 
@@ -10,7 +11,9 @@ def solve(s):
     #    prev = s
     #    s = s.replace("()", "").replace("[]", "").replace("{}", "")
     #return s == ""
-    pair = {')':'(', ']':'[', '}':'{'}
+
+
+    pair = {")":"(", "]": "[", "}": "{"}
     stack = []
     for ch in s:
         if ch in pair:
@@ -20,8 +23,6 @@ def solve(s):
         else:
             stack.append(ch)
     return len(stack) == 0
-
-
 
 
 

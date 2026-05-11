@@ -79,5 +79,12 @@
     "editor.hover.enabled": "off",
     "editor.inlayHints.enabled": "off",
     "editor.lightbulb.enabled": "off"
-  }
+  },
+  "python-envs.pythonProjects": [
+    {
+      "path": ".",
+      "envManager": "ms-python.python:venv",
+      "packageManager": "ms-python.python:pip"
+    }
+  ]
 }
